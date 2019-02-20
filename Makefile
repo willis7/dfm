@@ -1,5 +1,5 @@
 .PHONY: all
-all: clean init update fmt vet lint coverage compile install end 
+all: build_fresh 
 
 NAME = dfm
 PWD := $(MKPATH:%/Makefile=%)
@@ -12,7 +12,7 @@ YELLOW_COLOR=\x1b[33;01m
 
 
 end:
-	@echo "$(YELLOW_COLOR)🤟🏼 🤟🏼 🤟🏼$(END_COLOR)"
+	@echo "$(YELLOW_COLOR)🤟 🤟 🤟$(END_COLOR)"
 
 clean:
 	@echo "$(GREEN_COLOR)Cleaning unwanted files $(END_COLOR)"
@@ -24,7 +24,7 @@ clean:
 
 init:	go.check
 	@echo "$(GREEN_COLOR)Initialising dep for the first time $(END_COLOR)"
-	go get -u github.com/golang/lint/golint
+	# go get -u github.com/golang/lint/golint
 
 fmt:	go.check
 	@echo "$(GREEN_COLOR)Running fmt $(END_COLOR)"
@@ -34,8 +34,8 @@ vet:	go.check
 	@echo "$(GREEN_COLOR)Running vet $(END_COLOR)"
 	go vet $(shell go list ./... | grep -v /vendor/)
 
-lint:	golint.check
-	golint $(shell go list ./... | grep -v /vendor/)
+# lint:	golint.check
+# 	golint $(shell go list ./... | grep -v /vendor/)
 
 test:	go.check
 	@echo "$(GREEN_COLOR)Running tests for all packages $(END_COLOR)"
@@ -59,11 +59,11 @@ install:	go.check
 	@echo "$(GREEN_COLOR)Installing all binaries $(END_COLOR)"
 	go install ./...
 
-static: fmt vet lint coverage
+static: fmt vet coverage
 
 build: static end
 
-build_fresh: clean init update static compile end
+build_fresh: clean init static compile end
 
 # .check targets just tests for a command to be available on your PATH.
 %.check:

@@ -10,3 +10,10 @@ Commands:
 * `dfm sync` - synchronise a dofile folder
 * `dfm rm` - remove a symlink
 * `dfm help` - list the help instructions
+
+
+## Contributing
+
+Compile
+
+* `make compile`

@@ -12,10 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package cmd
 
-import "github.com/willis7/dfm/cmd"
+import (
+	"fmt"
+	"os"
 
-func main() {
-	cmd.Execute()
+	"github.com/spf13/cobra"
+)
+
+var cfgFile string
+
+var rootCmd = &cobra.Command{
+	Use:   "dfm",
+	Short: "CLI for managing your dotfiles",
+}
+
+// Execute is the CLI entrypoint
+func Execute() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
