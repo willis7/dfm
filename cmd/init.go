@@ -15,6 +15,9 @@
 package cmd
 
 import (
+	"path/filepath"
+
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/willis7/dfm/api"
 )
@@ -27,7 +30,10 @@ var initCmd = &cobra.Command{
 		in the $HOME directory`,
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		api.FolderSetup()
+		dfmFoldername := ".dfm"
+		home, _ := homedir.Dir()
+		dfmHome := filepath.Join(home, dfmFoldername)
+		api.CreateDfmHome(dfmHome)
 	},
 }
 
