@@ -12,10 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package cmd
 
-import "github.com/willis7/dfm/cmd"
+import (
+	"github.com/spf13/cobra"
+	"github.com/willis7/dfm/api"
+)
 
-func main() {
-	cmd.Execute()
+// initCmd represents the init command
+var initCmd = &cobra.Command{
+	Use:   "init",
+	Short: "Initialise a new dfm folder",
+	Long: `intitialise a new dfm folder. Creates a .dfm directory
+		in the $HOME directory`,
+	Args: cobra.NoArgs,
+	Run:  api.FolderSetup,
+}
+
+func init() {
+	rootCmd.AddCommand(initCmd)
 }
