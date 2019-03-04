@@ -4,7 +4,7 @@ dfm is a cli for managing your dotfiles. It's heavily influence by the spectacul
 
 Commands:
 
-* `dfm init` - intitialise a new dotfiles directory
+* ~~`dfm init` - intitialise a new dotfiles directory~~
 * `dfm ls` - list files managed by dfm
 * `dfm add` - convert a file into a dotfile managed by dfm
 * `dfm sync` - synchronise a dofile folder
