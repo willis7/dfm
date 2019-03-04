@@ -5,14 +5,11 @@ import (
 	"os"
 )
 
-// CreateDfmHome will intitialise the dfmhome directory
+// CreateDfmHome if not exists, else do nothing
 func CreateDfmHome(basename string) {
 	if !Exists(basename) {
 		fmt.Printf("Creating directory %s\n", basename)
 		os.MkdirAll(basename, os.ModePerm)
-	} else {
-		fmt.Printf("%s already exists\n", basename)
-		os.Exit(1)
 	}
 }
 
