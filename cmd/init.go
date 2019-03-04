@@ -26,7 +26,9 @@ var initCmd = &cobra.Command{
 	Long: `intitialise a new dfm folder. Creates a .dfm directory
 		in the $HOME directory`,
 	Args: cobra.NoArgs,
-	Run:  api.FolderSetup,
+	Run: func(cmd *cobra.Command, args []string) {
+		api.FolderSetup()
+	},
 }
 
 func init() {

@@ -6,11 +6,10 @@ import (
 	"path/filepath"
 
 	homedir "github.com/mitchellh/go-homedir"
-	"github.com/spf13/cobra"
 )
 
 // FolderSetup will intitialise the dfmhome directory
-func FolderSetup(cmd *cobra.Command, args []string) {
+func FolderSetup() {
 	dfmFoldername := ".dfm"
 	home, _ := homedir.Dir()
 	dfmHome := filepath.Join(home, dfmFoldername)
