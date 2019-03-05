@@ -17,6 +17,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -38,23 +39,41 @@ var addCmd = &cobra.Command{
 		return fmt.Errorf("invalid file path specified: %s", args[0])
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		dfmFoldername := ".dfm"
+		dfmFolderName := ".dfm"
 		home, _ := homedir.Dir()
-		dfmHome := filepath.Join(home, dfmFoldername)
-		oldpath := args[0]
+		dfmHome := filepath.Join(home, dfmFolderName)
+		oldPath := args[0]
 		api.CreateDfmHome(dfmHome)
-		fmt.Printf("adding file %s to dfm", oldpath)
+		fmt.Printf("adding file %s to dfm", oldPath)
 
-		// split path immediately following the final seperator into directory and file name component
-		_, file := filepath.Split(oldpath)
+		// split path immediately following the final separator into directory and file name component
+		_, file := filepath.Split(oldPath)
+
+		// TODO: check if file is a symlink and fail if it is
 
 		// move the file to dfmHome
-		newpath := filepath.Join(dfmHome, file)
-		os.Rename(oldpath, newpath)
+		newPath := filepath.Join(dfmHome, file)
+		err := os.Rename(oldPath, newPath)
+		if err != nil {
+			fmt.Printf("failed to move file: %s", err)
+		}
 
 		// create symlink back to original location
-		os.Symlink(newpath, oldpath)
+		err = os.Symlink(newPath, oldPath)
+		if err != nil {
+			fmt.Printf("failed to create symlink: %s", err)
+		}
+		addSymlinkRecord(newPath, oldPath, dfmHome)
 	},
+}
+
+func addSymlinkRecord(newPath, oldPath, dfmHome string) {
+	d1 := []byte(fmt.Sprintf("%s --> %s", newPath, oldPath))
+	err := ioutil.WriteFile(filepath.Join(dfmHome, ".dfm"), d1, 0644)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
 
 func init() {
