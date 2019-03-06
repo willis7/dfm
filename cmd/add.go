@@ -17,11 +17,11 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"github.com/spf13/viper"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/willis7/dfm/api"
 )
@@ -39,9 +39,7 @@ var addCmd = &cobra.Command{
 		return fmt.Errorf("invalid file path specified: %s", args[0])
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		dfmFolderName := ".dfm"
-		home, _ := homedir.Dir()
-		dfmHome := filepath.Join(home, dfmFolderName)
+		dfmHome := viper.GetString("home")
 		oldPath := args[0]
 		api.CreateDfmHome(dfmHome)
 		fmt.Printf("adding file %s to dfm", oldPath)
