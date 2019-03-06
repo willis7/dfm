@@ -16,7 +16,10 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/mitchellh/go-homedir"
+	"github.com/spf13/viper"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
@@ -33,5 +36,37 @@ func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
+	}
+}
+
+func init() {
+	cobra.OnInitialize(initConfig)
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dfm.yml)")
+	dfmFolderName := ".dfm"
+	home, _ := homedir.Dir()
+	dfmHome := filepath.Join(home, dfmFolderName)
+	viper.SetDefault("home", dfmHome)
+}
+
+func initConfig() {
+	//	DOnt forget to read config either from cfgFile or from home directory!
+	if cfgFile != "" {
+		//	 Use config file from the flag.
+		viper.SetConfigFile(cfgFile)
+	} else {
+		// Find home directory
+		home, err := homedir.Dir()
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		//	Search config in home directory with name ".dfm" (without extension).
+		viper.AddConfigPath(home)
+		viper.SetConfigName(".dfm")
+	}
+
+	if err := viper.ReadInConfig(); err != nil {
+		fmt.Println("WARNING: no config specified, using default values")
 	}
 }
